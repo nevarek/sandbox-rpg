@@ -40,3 +40,6 @@ enabled = true
 cast_to = Vector2( 0, 48 )
 collision_mask = 6
 
+[node name="FlipTimer" type="Timer" parent="."]
+one_shot = true
+
