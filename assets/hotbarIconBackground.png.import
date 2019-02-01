@@ -2,12 +2,12 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Dirt.png-cc1fb26691f8e5bcf036ffa7faba0c81.stex"
+path="res://.import/hotbarIconBackground.png-a77a64de7b40f9b394ec0978ede2c776.stex"
 
 [deps]
 
-source_file="res://Dirt.png"
-dest_files=[ "res://.import/Dirt.png-cc1fb26691f8e5bcf036ffa7faba0c81.stex" ]
+source_file="res://assets/hotbarIconBackground.png"
+dest_files=[ "res://.import/hotbarIconBackground.png-a77a64de7b40f9b394ec0978ede2c776.stex" ]
 
 [params]
 

@@ -3,7 +3,7 @@ extends Node
 var Player
 
 func _ready():
-	Player = get_parent()
+	Player = get_node('/root/main/Player')
 	
 	set_process_input(true)
 	
@@ -15,4 +15,7 @@ func _input(event):
 		selectItem(1)
 		
 func selectItem(inventoryIndex):
-	Player.selectedSlot = Player.Inventory[inventoryIndex]
+	Player.selectedSlot = {
+		name = Player.Inventory[inventoryIndex], 
+		index = inventoryIndex
+	}

@@ -1,9 +1,10 @@
 extends Node2D
 
-var EnemyScene = preload('res://Enemy.tscn')
+var EnemyScene = preload('res://scenes/entities/Enemy.tscn')
 onready var Player = $Player
 
 func _ready():
+	$UI/HotbarPanel.setSelectionToIndex(0)
 	randomize()
 
 func _process(delta):

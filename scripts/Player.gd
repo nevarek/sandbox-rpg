@@ -1,7 +1,8 @@
 extends KinematicBody2D
-var Bullet = preload('res://bullet.tscn')
-
-onready var GLOBAL = get_node('/root/main/GameState')
+var Bullet = preload('res://scenes/entities/bullet.tscn')
+	
+onready var HotbarPanel = get_node('/root/main/UI/HotbarPanel')
+onready var GLOBAL = get_node('/root/main/GlobalControllers/GameState')
 
 onready var maxSpeed = Vector2(600, 1000)
 onready var speed = Vector2(0, 0)
@@ -13,11 +14,15 @@ var velocity = Vector2()
 var direction = 0
 var input_direction = 0
 
-export var selectedSlot = 0
+export var selectedSlot = {
+	"index": 0,
+	"name": '<UNNAMED>'
+}
+
 export var Inventory = {
-		0: 'pick',
-		1: 'gun'
-	}
+	0: 'pick',
+	1: 'gun'
+}
 
 
 func isOnFloor():
@@ -34,17 +39,21 @@ func _ready():
 	set_process(true)
 	set_process_input(true)
 	
-	selectedSlot = Inventory[0]
+	selectedSlot.name = Inventory[0]
+	selectedSlot.index = 0
 	
 func _input(event):
-	if event.is_action_pressed("jump") and isOnFloor():
+	if event.is_action_pressed("jump") and (isOnFloor() or is_on_floor()):
 		speed.y = -jumpForce
 		
 	if event.is_action_pressed("primaryFire"):
-		shoot()
+		if selectedSlot.name == 'gun':
+			shoot()
+		else:
+			print(selectedSlot.name)
 
 func _process(delta):
-	pass
+	HotbarPanel.setSelectionToIndex(selectedSlot.index)
 
 func _get_input(delta):
 	# get previous direction
@@ -75,21 +84,20 @@ func _get_input(delta):
 
 
 func shoot():
-	if selectedSlot == 'gun':
-		var bullet = Bullet.instance()
-		var target = get_global_mouse_position()
+	var bullet = Bullet.instance()
+	var target = get_global_mouse_position()
+	
+	if $Cooldown.is_stopped() || true:
+		var y = _faceTarget(target)
 		
-		if $Cooldown.is_stopped() || true:
-			var y = _faceTarget(target)
-			
-			$Cooldown.start()
-			
-			get_parent().add_child(bullet)
-			
-			bullet.position = $BulletSpawnLocation.position
-			bullet.destination = target
-			
-			bullet.fire()
+		$Cooldown.start()
+		
+		get_parent().add_child(bullet)
+		
+		bullet.position = $BulletSpawnLocation.position
+		bullet.destination = target
+		
+		bullet.fire()
 
 func _faceTarget(target):
 	var orientation
