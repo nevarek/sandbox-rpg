@@ -1,16 +1,23 @@
 extends KinematicBody2D
 
+onready var Player = get_node('/root/main/Player')
+
 onready var speed = 50
 
 var velocity = Vector2()
 var destination = Vector2()
-var damage = 10
+export var damage = 10
+export var origin = Vector2()
+
+export var MAX_DISTANCE_FROM_ORIGIN = 100000
+export var MAX_DISTANCE_FROM_PLAYER = 10000
 
 func _ready():
 	position = Vector2()
 	set_process(true)
 	
 func fire():
+	origin = position
 	velocity = (destination - position).normalized() * speed
 	
 func _physics_process(delta):
@@ -23,12 +30,13 @@ func _physics_process(delta):
 			var victim = collision.collider
 			victim.applyDamage(damage)
 	
-	checkIfPastScreen()
+	checkIfShouldDespawn()
 		
-func checkIfPastScreen():
-	var screen = get_viewport_rect()
+func checkIfShouldDespawn():
+	var distanceFromPlayer = (Player.position - position).length()
+	var distanceFromOrigin = (origin - position).length()
 	
-	if position.x > screen.size.x or position.x < 0 or position.y > screen.size.y or position.y < 0:
+	if distanceFromPlayer > MAX_DISTANCE_FROM_PLAYER or distanceFromOrigin > MAX_DISTANCE_FROM_ORIGIN:
 		queue_free()
 		
 func _shouldCollide(collision):
