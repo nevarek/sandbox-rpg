@@ -4,12 +4,14 @@ var Bullet = preload('res://scenes/entities/bullet.tscn')
 onready var HotbarPanel = get_node('/root/main/UI/HotbarPanel')
 onready var GLOBAL = get_node('/root/main/GlobalControllers/GameState')
 
-onready var maxSpeed = Vector2(600, 1000)
-onready var speed = Vector2(0, 0)
-onready var acceleration = 1000
-onready var deceleration = 2000
-onready var jumpForce = 800
+onready var playerWidth = $Sprite.get_rect().size.x
+onready var playerHeight = $Sprite.get_rect().size.y
 
+var maxSpeed = Vector2(600, 1000)
+var speed = Vector2(0, 0)
+var acceleration = 1000
+var deceleration = 2000
+var jumpForce = 800
 var velocity = Vector2()
 var direction = 0
 var input_direction = 0
@@ -35,7 +37,7 @@ func isOnFloor():
 	return false
 
 func _ready():
-	$BulletSpawnLocation.position = position + Vector2(32, 0)
+	$BulletSpawnLocation.position = position
 	set_process(true)
 	set_process_input(true)
 	
@@ -54,6 +56,22 @@ func _input(event):
 
 func _process(delta):
 	HotbarPanel.setSelectionToIndex(selectedSlot.index)
+
+func _physics_process(delta):
+	var collision = null
+	
+	_processBody()
+	
+	_get_input(delta)
+	
+	# enable/disable gravity
+	if get_slide_count() != 0:
+		collision = get_slide_collision(0)
+		collision.collider.is_in_group("Environment")
+		if (speed.y == 0):
+			velocity.y = 0
+		
+	move_and_slide(velocity, Vector2(0, -1))
 
 func _get_input(delta):
 	# get previous direction
@@ -77,12 +95,37 @@ func _get_input(delta):
 
 	speed.y += GLOBAL.GRAVITY * delta
 		
-	speed = clampVector(speed, maxSpeed)
+	speed = _clampVector(speed, maxSpeed)
 	
 	velocity.x = direction * speed.x
 	velocity.y = speed.y
 
+func _processBody():
+	$BulletSpawnLocation.position = position
 
+func _clampVector(speedVector, maxSpeedVector):
+	var clampedVector = speedVector
+	
+	clampedVector.x = clamp(clampedVector.x, 0, maxSpeedVector.x)
+	clampedVector.y = clamp(clampedVector.y, -jumpForce, maxSpeedVector.y)
+	
+	return clampedVector
+
+func _faceTarget(target):
+	var orientation
+	
+	if $Sprite.flip_h:
+		orientation = target - position
+	else:
+		orientation = position - target
+
+		
+	if orientation.x < 0:
+		_flipBody()
+
+func _flipBody():
+	$Sprite.flip_h = !$Sprite.flip_h
+	
 func shoot():
 	var bullet = Bullet.instance()
 	var target = get_global_mouse_position()
@@ -98,44 +141,3 @@ func shoot():
 		bullet.destination = target
 		
 		bullet.fire()
-
-func _faceTarget(target):
-	var orientation
-	
-	if $Sprite.flip_h:
-		orientation = position - target
-	else:
-		orientation = target - position
-		
-	if orientation.x < 0:
-		_flipBody()
-
-func _flipBody():
-	$Sprite.flip_h = !$Sprite.flip_h
-
-func _physics_process(delta):
-	var collision = null
-	
-	_processBody()
-	
-	_get_input(delta)
-	
-	# enable/disable gravity
-	if get_slide_count() != 0:
-		collision = get_slide_collision(0)
-		collision.collider.is_in_group("Environment")
-		if (speed.y == 0):
-			velocity.y = 0
-		
-	move_and_slide(velocity, Vector2(0, -1))
-
-func _processBody():
-	$BulletSpawnLocation.position = position
-
-func clampVector(speedVector, maxSpeedVector):
-	var clampedVector = speedVector
-	
-	clampedVector.x = clamp(clampedVector.x, 0, maxSpeedVector.x)
-	clampedVector.y = clamp(clampedVector.y, -jumpForce, maxSpeedVector.y)
-	
-	return clampedVector
