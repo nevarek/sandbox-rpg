@@ -37,6 +37,7 @@ func _input(event):
 		speed.y = -jumpForce
 		
 	if event.is_action_pressed("primaryFire"):
+		$FlipTimer.start()
 		if selectedSlot.name == 'gun':
 			shoot()
 		else:
