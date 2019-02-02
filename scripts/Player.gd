@@ -3,6 +3,7 @@ var Bullet = preload('res://scenes/entities/bullet.tscn')
 	
 onready var HotbarPanel = get_node('/root/main/CanvasLayer/UI/HotbarPanel')
 onready var GLOBAL = get_node('/root/main/GlobalControllers/GameState')
+onready var Tilemap = get_node('/root/main/Tilemap')
 
 export var maxSpeed = Vector2(600, 1000)
 export var speed = Vector2(0, 0)
@@ -39,6 +40,8 @@ func _input(event):
 	if event.is_action_pressed("primaryFire"):
 		if selectedSlot.name == 'gun':
 			shoot()
+		elif selectedSlot.name == 'pick':
+			pick()
 		else:
 			print(selectedSlot.name)
 
@@ -145,3 +148,7 @@ func shoot():
 		bullet.destination = target
 		
 		bullet.fire()
+		
+func pick():
+	Tilemap.hit_tile_at(get_global_mouse_position(), 2)
+	

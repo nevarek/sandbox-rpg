@@ -19,14 +19,21 @@ func _process(delta):
 
 
 func spawnNewEnemy():
-		var newEnemy
-		newEnemy = EnemyScene.instance()
+	"""
+	Attempts to spawn a new enemy within a range of the player.
+	
+	Should probably create a player spawn radius instead.
+	"""
+	var newEnemy
+	newEnemy = EnemyScene.instance()
+	
+	# the jankiest do-while implementation ever
+	newEnemy.position.x = rand_range(0, get_viewport_rect().size.x)
+	newEnemy.position.y = rand_range(0, get_viewport_rect().size.y)
+	
+	var enemyDistanceFromPlayer = (newEnemy.position - Player.position).length()
+	while enemyDistanceFromPlayer < 5:
 		newEnemy.position.x = rand_range(0, get_viewport_rect().size.x)
 		newEnemy.position.y = rand_range(0, get_viewport_rect().size.y)
 
-		var enemyDistanceFromPlayer = (newEnemy.position - Player.position).length()
-		while enemyDistanceFromPlayer < 5:
-			newEnemy.position.x = rand_range(0, get_viewport_rect().size.x)
-			newEnemy.position.y = rand_range(0, get_viewport_rect().size.y)
-
-		add_child(newEnemy)
+	add_child(newEnemy)
