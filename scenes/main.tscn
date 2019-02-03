@@ -8,7 +8,7 @@
 [ext_resource path="res://assets/selection.png" type="Texture" id=6]
 [ext_resource path="res://scripts/GameState.gd" type="Script" id=7]
 [ext_resource path="res://scripts/PlayerInputController.gd" type="Script" id=8]
-[ext_resource path="res://scenes/Tilemap.tscn" type="PackedScene" id=9]
+[ext_resource path="res://TileMap.tscn" type="PackedScene" id=9]
 [ext_resource path="res://scenes/entities/Player.tscn" type="PackedScene" id=10]
 
 [sub_resource type="RectangleShape2D" id=1]
@@ -25,7 +25,6 @@ script = ExtResource( 1 )
 editor/display_folded = true
 
 [node name="UI" type="Control" parent="CanvasLayer"]
-editor/display_folded = true
 margin_right = 1020.0
 margin_bottom = 40.0
 
@@ -82,6 +81,27 @@ margin_right = 16.0
 margin_bottom = 14.0
 text = "2"
 
+[node name="SlotBackground3" type="ColorRect" parent="CanvasLayer/UI/HotbarPanel/Grid"]
+margin_left = 72.0
+margin_right = 104.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+
+[node name="ToolSprite" type="Sprite" parent="CanvasLayer/UI/HotbarPanel/Grid/SlotBackground3"]
+z_index = 1
+texture = ExtResource( 5 )
+centered = false
+
+[node name="BackgroundSprite" type="Sprite" parent="CanvasLayer/UI/HotbarPanel/Grid/SlotBackground3"]
+texture = ExtResource( 4 )
+centered = false
+
+[node name="SlotNumber" type="Label" parent="CanvasLayer/UI/HotbarPanel/Grid/SlotBackground3"]
+modulate = Color( 0, 0, 0, 1 )
+margin_right = 16.0
+margin_bottom = 14.0
+text = "2"
+
 [node name="SelectionSquare" type="Sprite" parent="CanvasLayer/UI/HotbarPanel/Grid"]
 texture = ExtResource( 6 )
 centered = false
@@ -120,8 +140,7 @@ margin_bottom = 12.0
 position = Vector2( 200, 7 )
 shape = SubResource( 1 )
 
-[node name="Tilemap" parent="." instance=ExtResource( 9 )]
-collision_layer = 7
+[node name="TileMap" parent="." instance=ExtResource( 9 )]
 
 [node name="Background" type="Node2D" parent="."]
 z_index = -10
