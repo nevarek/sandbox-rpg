@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://scripts/main.gd" type="Script" id=1]
 [ext_resource path="res://scripts/HotbarPanelController.gd" type="Script" id=2]
@@ -8,8 +8,9 @@
 [ext_resource path="res://assets/selection.png" type="Texture" id=6]
 [ext_resource path="res://scripts/GameState.gd" type="Script" id=7]
 [ext_resource path="res://scripts/InventoryInputController.gd" type="Script" id=8]
-[ext_resource path="res://scenes/TileMap.tscn" type="PackedScene" id=9]
-[ext_resource path="res://scenes/entities/Player.tscn" type="PackedScene" id=10]
+[ext_resource path="res://scenes/ItemSpawnManager.gd" type="Script" id=9]
+[ext_resource path="res://scenes/TileMap.tscn" type="PackedScene" id=10]
+[ext_resource path="res://scenes/entities/Player.tscn" type="PackedScene" id=11]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -86,7 +87,6 @@ texture = ExtResource( 6 )
 centered = false
 
 [node name="GlobalControllers" type="Node" parent="."]
-editor/display_folded = true
 
 [node name="EnemySpawnTimer" type="Timer" parent="GlobalControllers"]
 wait_time = 10.0
@@ -97,6 +97,9 @@ script = ExtResource( 7 )
 
 [node name="PlayerInputController" type="Node" parent="GlobalControllers"]
 script = ExtResource( 8 )
+
+[node name="ItemSpawnManager" type="Node" parent="GlobalControllers"]
+script = ExtResource( 9 )
 
 [node name="Floor" type="StaticBody2D" parent="." groups=[
 "Environment",
@@ -119,7 +122,7 @@ margin_bottom = 12.0
 position = Vector2( 200, 7 )
 shape = SubResource( 1 )
 
-[node name="TileMap" parent="." instance=ExtResource( 9 )]
+[node name="TileMap" parent="." instance=ExtResource( 10 )]
 
 [node name="Background" type="Node2D" parent="."]
 z_index = -10
@@ -132,7 +135,7 @@ margin_right = 1330.0
 margin_bottom = 910.0
 color = Color( 0.27451, 0.733333, 0.980392, 0.576471 )
 
-[node name="Player" parent="." instance=ExtResource( 10 )]
+[node name="Player" parent="." instance=ExtResource( 11 )]
 position = Vector2( 1650, -570 )
 z_index = 100
 jumpForce = 900

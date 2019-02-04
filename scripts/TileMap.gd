@@ -1,5 +1,7 @@
 extends TileMap
 
+onready var ItemSpawnManager = get_node('/root/main/GlobalControllers/ItemSpawnManager')
+
 var Tile = preload("res://scenes/Tile.tscn")
 
 var tile_map = []
@@ -54,6 +56,7 @@ func reset_map():
 
 func remove_tile(pos):
 	set_tile(pos, tile_array[0])
+	ItemSpawnManager.drop_item(ItemSpawnManager.items[0])
 	
 func hit_tile(pos, damage):
 	if get_cellv(pos) != -1:
