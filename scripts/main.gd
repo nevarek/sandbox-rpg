@@ -1,3 +1,11 @@
+"""
+Main
+
+Controls the logic for managing the multiple parts of the project.
+
+NOTE this may contain logic that needs to be refactored later.
+"""
+
 extends Node2D
 
 var EnemyScene = preload('res://scenes/entities/Enemy.tscn')

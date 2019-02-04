@@ -1,3 +1,12 @@
+"""
+Player
+
+Controls the logic for player movement and actions.
+
+Movement is acceleration-based.
+Collisions for floor detection needed two raycasts for each side of the player
+"""
+
 extends KinematicBody2D
 var Bullet = preload('res://scenes/entities/bullet.tscn')
 	
@@ -57,7 +66,8 @@ func _physics_process(delta):
 	# enable/disable gravity
 	if get_slide_count() != 0:
 		collision = get_slide_collision(0)
-		collision.collider.is_in_group("Environment")
+		if collision.collider != null:
+			collision.collider.is_in_group("Environment")
 
 	move_and_slide(velocity, Vector2(0, -1))
 	
@@ -148,10 +158,7 @@ func shoot():
 		
 		get_parent().add_child(bullet)
 		
-		bullet.position = $BulletSpawnLocation.position
-		bullet.destination = target
-		
-		bullet.fire()
+		bullet.fire(self, target)
 		
 func pick():
 	var tile_index = Tilemap.world_to_map(get_global_mouse_position())

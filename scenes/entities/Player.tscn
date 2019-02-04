@@ -5,7 +5,7 @@
 
 [sub_resource type="RectangleShape2D" id=1]
 
-extents = Vector2( 32.1796, 48 )
+extents = Vector2( 28, 46 )
 
 [node name="Player" type="KinematicBody2D" groups=[
 "Player",
@@ -22,6 +22,7 @@ texture = ExtResource( 2 )
 flip_h = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 2 )
 shape = SubResource( 1 )
 
 [node name="Cooldown" type="Timer" parent="."]
@@ -31,13 +32,13 @@ one_shot = true
 position = Vector2( 32, 0 )
 
 [node name="RayCast_Floor_Right" type="RayCast2D" parent="."]
-position = Vector2( 31, 0 )
+position = Vector2( 28, 0 )
 enabled = true
 cast_to = Vector2( 0, 48 )
 collision_mask = 6
 
 [node name="RayCast_Floor_Left" type="RayCast2D" parent="."]
-position = Vector2( -31, 0 )
+position = Vector2( -28, 0 )
 enabled = true
 cast_to = Vector2( 0, 48 )
 collision_mask = 6

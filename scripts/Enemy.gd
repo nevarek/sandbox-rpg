@@ -1,3 +1,9 @@
+"""
+Enemy
+
+Controls the enemy actions like attacking, moving, and receiving damage
+"""
+
 extends KinematicBody2D
 
 onready var GLOBAL = get_node('/root/main/GameState')
