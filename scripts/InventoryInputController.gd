@@ -1,3 +1,9 @@
+"""
+InventoryInputController
+
+Input handling for hotbar and rest of inventory
+"""
+
 extends Node
 
 var Player

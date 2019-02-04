@@ -1,3 +1,12 @@
+"""
+Player
+
+Controls the logic for player movement and actions.
+
+Movement is acceleration-based.
+Collisions for floor detection needed two raycasts for each side of the player
+"""
+
 extends KinematicBody2D
 var Bullet = preload('res://scenes/entities/bullet.tscn')
 	
@@ -36,6 +45,15 @@ func _ready():
 func _input(event):	
 	if event.is_action_pressed("jump") and _isOnFloor():
 		speed.y = -jumpForce
+	
+	
+	if not $FlipTimer.is_stopped():
+		if event.is_action_pressed("ui_right"):
+			$Sprite.flip_h = true
+			$FlipTimer.stop()
+		if event.is_action_pressed("ui_right"):
+			$Sprite.flip_h = false
+			$FlipTimer.stop()
 		
 	if event.is_action_pressed("primaryFire"):
 		$FlipTimer.start()
@@ -52,13 +70,14 @@ func _process(delta):
 func _physics_process(delta):
 	var collision = null
 
-	_processBody()
+	#_processBody()
 	_get_input(delta)
 
 	# enable/disable gravity
 	if get_slide_count() != 0:
 		collision = get_slide_collision(0)
-		collision.collider.is_in_group("Environment")
+		if collision.collider != null:
+			collision.collider.is_in_group("Environment")
 
 	move_and_slide(velocity, Vector2(0, -1))
 	
@@ -103,7 +122,8 @@ func _get_input(delta):
 		speed.y = 1
 
 func _processBody():
-	$BulletSpawnLocation.position = position
+	#$BulletSpawnLocation.position = position
+	pass
 
 func _clampVector(speedVector, maxSpeedVector):
 	var clampedVector = speedVector
@@ -143,18 +163,18 @@ func shoot():
 	var target = get_global_mouse_position()
 	
 	if $Cooldown.is_stopped() || true:
-		var y = _faceTarget(target)
+		_faceTarget(target)
 		
 		$Cooldown.start()
 		
 		get_parent().add_child(bullet)
 		
-		bullet.position = $BulletSpawnLocation.position
-		bullet.destination = target
-		
-		bullet.fire()
+		bullet.fire(self, target)
 		
 func pick():
-	var tile_index = Tilemap.world_to_map(get_global_mouse_position())
+	var target = get_global_mouse_position()
+	_faceTarget(target)
+	
+	var tile_index = Tilemap.world_to_map(target)
 	Tilemap.hit_tile(tile_index, 5)
 	

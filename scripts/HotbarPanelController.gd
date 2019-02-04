@@ -1,3 +1,9 @@
+"""
+HotbarPanelController
+
+Controls the logic for the hotbar like moving the selector
+"""
+
 extends Panel
 
 func _ready():
