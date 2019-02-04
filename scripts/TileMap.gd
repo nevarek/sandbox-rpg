@@ -1,39 +1,33 @@
 extends TileMap
 
-var Tile = preload("res://Tile.tscn")
-
-var DirtTexture = preload("res://assets/Dirt.png")
+var Tile = preload("res://scenes/Tile.tscn")
 
 var tile_map = []
-var tile_array = []
+export var tile_array = []
 var click_pos
 var tile_index
 var tile_id
 
+const map_width = 100
+const map_height = 15
+
 func _create_tile_objects():
 	var air_tile = Tile.instance()
-	air_tile.__init("air", -1, -1, null)
+	air_tile.__init("air", INF, -1)
 	
 	var dirt_tile = Tile.instance()
-	dirt_tile.__init("dirt", 10, 0, DirtTexture)
+	dirt_tile.__init("dirt", 10, 0)
 	
 	tile_array.append(air_tile)
 	tile_array.append(dirt_tile)
 
 func _ready():
 	_create_tile_objects()
-	_load_tiles()
 	init_map()
+	reset_map()
 	
 func _input(event):
-	
-	if event.is_action_pressed("primaryFire"):
-		click_pos = get_global_mouse_position()
-		tile_index = world_to_map(click_pos)
-		
-		hit_tile(tile_index, 5)
-		
-	if event.is_action_pressed("ui_select"):
+	if event.is_action_pressed("reset"):
 		reset_map()
 
 func set_tile(pos, tile):
@@ -44,27 +38,19 @@ func set_tile(pos, tile):
 	}
 
 func init_map():
-	for x in range(0, 3):
+	for x in range(0, map_width):
 		tile_map.append([])
 		tile_map[x] = []
-		for y in range (0, 3):
+		for y in range (0, map_height):
 			tile_map[x].append([])
 			tile_map[x][y] = {}
-			set_tile(Vector2(x, y), tile_array[1])
 	
 func reset_map():
-	for x in range(0, 3):
-		for y in range (0, 3):
+	for x in range(0, map_width):
+		for y in range (0, map_height):
 			set_tile(Vector2(x, y), tile_array[1])
 			
-	print(tile_map)
-	
-func _load_tiles():
-	var index = 0
-	var newtile = tile_array[index + 1]
-	
-	tile_set.create_tile(index)
-	tile_set.tile_set_texture(index, newtile.texture)
+	#print(tile_map)
 
 func remove_tile(pos):
 	set_tile(pos, tile_array[0])

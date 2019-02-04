@@ -96,6 +96,10 @@ func _get_input(delta):
 	# Unsticks from floor when jumping. This is due to a constant velocity due to gravity
 	if Input.is_action_just_pressed("jump") and _isOnFloor() and velocity.y > 0:
 		velocity.y = 0
+	# bumps the head
+	if is_on_ceiling():
+		velocity.y = 1
+		speed.y = 1
 
 func _processBody():
 	$BulletSpawnLocation.position = position
@@ -151,5 +155,5 @@ func shoot():
 		
 func pick():
 	var tile_index = Tilemap.world_to_map(get_global_mouse_position())
-	Tilemap.hit_tile(tile_index, 2)
+	Tilemap.hit_tile(tile_index, 5)
 	

@@ -10,14 +10,11 @@ extents = Vector2( 16, 16 )
 
 [node name="Dirt" type="Sprite" parent="."]
 texture = ExtResource( 1 )
-centered = false
-__meta__ = {
-"_edit_group_": true
-}
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Dirt"]
+collision_layer = 7
+collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Dirt/StaticBody2D"]
-position = Vector2( 16, 16 )
 shape = SubResource( 1 )
 

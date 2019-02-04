@@ -13,9 +13,9 @@ func _ready():
 
 func _process(delta):
 	pass
-#	if EnemySpawnTimer.is_stopped():
-#		EnemySpawnTimer.start()
-#		spawnNewEnemy()
+	if EnemySpawnTimer.is_stopped():
+		EnemySpawnTimer.start()
+		spawnNewEnemy()
 
 
 func spawnNewEnemy():

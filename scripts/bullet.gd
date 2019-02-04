@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 onready var Player = get_node('/root/main/Player')
 
-onready var speed = 50
+export var speed = 50
 
 var velocity = Vector2()
 var destination = Vector2()
@@ -24,6 +24,7 @@ func _physics_process(delta):
 	var collision = move_and_collide(velocity)
 	
 	if collision != null and _shouldCollide(collision):
+
 		queue_free()
 		
 		if _collisionHitEnemy(collision):
