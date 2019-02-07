@@ -5,7 +5,6 @@ Controls the logic for managing the multiple parts of the project.
 
 NOTE this may contain logic that needs to be refactored later.
 """
-
 extends Node2D
 
 var EnemyScene = preload('res://scenes/entities/Enemy.tscn')
@@ -15,7 +14,7 @@ onready var EnemySpawnTimer = $GlobalControllers/EnemySpawnTimer
 onready var PlayerCamera = $Player/PlayerCamera
 
 func _ready():
-	$CanvasLayer/UI/HotbarPanel.setSelectionToIndex(0)
+	$CanvasLayer/UI/HotbarPanel.select_slot(Player.Inventory.selectedSlot)
 	randomize()
 	PlayerCamera.make_current()
 
