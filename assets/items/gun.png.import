@@ -2,12 +2,12 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/gun.png-312878ca3ec850766373eb6a5040d08e.stex"
+path="res://.import/gun.png-15a94ccf158010c24f8f06c3efb4f3f8.stex"
 
 [deps]
 
-source_file="res://assets/gun.png"
-dest_files=[ "res://.import/gun.png-312878ca3ec850766373eb6a5040d08e.stex" ]
+source_file="res://assets/items/gun.png"
+dest_files=[ "res://.import/gun.png-15a94ccf158010c24f8f06c3efb4f3f8.stex" ]
 
 [params]
 
