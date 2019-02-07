@@ -1,3 +1,11 @@
+"""
+PlayerInputController
+
+Controls the logic for player movement and uses actions provided from player.
+
+Movement is acceleration-based.
+Collisions for floor detection needed two raycasts for each side of the player
+"""
 extends Node
 
 var Bullet = preload('res://scenes/entities/bullet.tscn')
@@ -22,7 +30,6 @@ func _ready():
 
 func _load():
 	Player.Inventory.select_slot(0)
-	print(Player.Inventory.selectedItem)
 	
 func _input(event):	
 	if event.is_action_pressed("jump") and _isOnFloor():

@@ -1,3 +1,13 @@
+"""
+Inventory
+
+Controls the logic for inventory management and slot selection.
+
+Interacts with the hotbar in order to visually represent changes.
+
+# TODO refactor to import items (maybe their texture refs in there too) into a file instead of statically declaring here #refactor
+"""
+
 extends Node
 
 var Player

@@ -1,16 +1,16 @@
 """
 Player
 
-Controls the logic for player movement and actions.
-
-Movement is acceleration-based.
-Collisions for floor detection needed two raycasts for each side of the player
+Controls the logic for player actions and stores player state. Also controls which direction a player is facing.
+Exports Player's nodes for the controller to easily access
 """
 
 extends KinematicBody2D
+# TODO refactor bullet to a projectile spawner instead of $BulletSpawnLocation #refactor
 const Bullet = preload('res://scenes/entities/bullet.tscn')
 
-var Tilemap
+onready var Tilemap = get_node('/root/main/TileMap')
+
 var Inventory
 var RayCastLeft
 var RayCastRight
@@ -18,9 +18,7 @@ var FlipTimer
 var _sprite
 
 func _ready():
-	Tilemap = get_node('/root/main/TileMap')
 	Inventory = $Inventory
-	print(Inventory)
 	
 	RayCastLeft = $RayCast_Floor_Left
 	RayCastRight = $RayCast_Floor_Right
@@ -53,6 +51,7 @@ func pick():
 	Tilemap.hit_tile(tile_index, 5)
 	
 func pickup(item_info):
+	# TODO Implement logic for picking up items. Currently, the item scene ref is returned. It should contain information what item is picked up.
 	print(item_info)
 	
 func _faceTarget(target):

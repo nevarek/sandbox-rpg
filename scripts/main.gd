@@ -38,7 +38,8 @@ func spawnNewEnemy():
 	Should probably create a player spawn radius instead.
 	"""
 	"""
-	TODO Raycast to nearest spawnable ground and spawn there, instead of inside stuff
+	TODO Raycast to nearest spawnable ground and spawn there, instead of inside the ground
+	TODO Make spawnable area around player instead of starting area
 	"""
 	var newEnemy
 	newEnemy = EnemyScene.instance()
