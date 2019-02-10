@@ -10,8 +10,8 @@ var click_pos
 var tile_index
 var tile_id
 
-const map_width = 100
-const map_height = 15
+const map_width = 500
+const map_height = 100
 
 func _create_tile_objects():
 	var air_tile = Tile.instance()
@@ -20,10 +20,15 @@ func _create_tile_objects():
 	var dirt_tile = Tile.instance()
 	dirt_tile.__init("dirt", 10, 0)
 	
+	var stone_tile = Tile.instance()
+	stone_tile.__init("stone", 20, 1)
+	
 	tile_array.append(air_tile)
 	tile_array.append(dirt_tile)
+	tile_array.append(stone_tile)
 
 func _ready():
+	randomize()
 	_create_tile_objects()
 	init_map()
 	reset_map()
@@ -48,16 +53,19 @@ func init_map():
 			tile_map[x][y] = {}
 	
 func reset_map():
+	var value
 	for x in range(0, map_width):
 		for y in range (0, map_height):
-			set_tile(Vector2(x, y), tile_array[1])
+			value = randi() % 2 + 1
+			set_tile(Vector2(x, y), tile_array[value])
 			
 	#print(tile_map)
 
 func remove_tile(pos):
+	var tile = get_cellv(pos)
 	set_tile(pos, tile_array[0])
 	
-	ItemSpawnManager.drop_item(ItemSpawnManager.items[1], map_to_world(pos))
+	ItemSpawnManager.drop_item(ItemSpawnManager.items[tile + 1], map_to_world(pos))
 	
 func hit_tile(pos, damage):
 	if get_cellv(pos) != -1:

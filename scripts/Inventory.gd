@@ -56,11 +56,13 @@ func init():
 	select_slot(0)
 
 func get_item_in_slot(index):
-	var item_info = {
-		"itemname": slots[index].itemname,
-		"itemtexture" : slots[index].itemtexture,
-		"count": -1
-	}
+	var item_info = null
+	if index < slots.size():
+		item_info = {
+			"itemname": slots[index].itemname,
+			"itemtexture" : slots[index].itemtexture,
+			"count": -1
+		}
 	return item_info
 
 func get_item_info_for_slot(index):

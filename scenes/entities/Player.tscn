@@ -43,6 +43,7 @@ cast_to = Vector2( 0, 48 )
 collision_mask = 6
 
 [node name="FlipTimer" type="Timer" parent="."]
+wait_time = 0.5
 one_shot = true
 
 [node name="PlayerInputController" type="Node" parent="."]

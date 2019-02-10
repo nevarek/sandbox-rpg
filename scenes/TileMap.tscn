@@ -8,6 +8,7 @@
 ]]
 tile_set = ExtResource( 1 )
 cell_size = Vector2( 32, 32 )
+cell_y_sort = true
 collision_layer = 4
 collision_mask = 12
 format = 1
