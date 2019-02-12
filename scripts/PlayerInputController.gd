@@ -31,7 +31,7 @@ func _ready():
 func _load():
 	Player.Inventory.select_slot(0)
 	
-func _input(event):	
+func _input(event):
 	if event.is_action_pressed("jump") and _isOnFloor():
 		speed.y = -jumpForce
 	
@@ -43,13 +43,15 @@ func _input(event):
 		
 	if event.is_action_pressed("primaryFire"):
 		var item = Player.Inventory.selectedItem
-		Player.start_flip()
-		if item.itemname == 'gun':
-			Player.shoot()
-		elif item.itemname == 'pick':
-			Player.pick()
-		else:
-			print(item.itemname)
+		
+		if item._id > -1:
+			Player.start_flip()
+			if item._name == 'gun':
+				Player.shoot()
+			elif item._name == 'pick':
+				Player.pick()
+			else:
+				print(item._name)
 
 func _process(delta):
 	pass
@@ -65,8 +67,9 @@ func _physics_process(delta):
 			collision = Player.get_slide_collision(collider_index)
 			if collision != null and collision.collider != null:
 				if collision.collider.is_in_group("Items"):
-					var item_info = collision.collider.pickup()
-					Player.pickup(item_info)
+					var item = collision.collider.pickup()
+					print(item.count)
+					Player.pickup(item)
 
 	Player.move_and_slide(velocity, Vector2(0, -1), false, 4, 0.785398, false)
 

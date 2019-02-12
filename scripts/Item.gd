@@ -1,7 +1,25 @@
 extends RigidBody2D
 
-func spawn(parent_scene):
-	parent_scene.add_child(self)
+var _item_info = {}
+var _id = -1
+var _name = null
+var count = 0
+var texture = null
+
+func spawn(parent_instance, spawn_position, item_info):
+	position = spawn_position
+	_set_properties(item_info)
+	parent_instance.add_child(self)
+
+func _set_properties(item_info):
+	_id = item_info._id
+	_name = item_info._name
+	count = 1
+	texture = item_info.texture
+	
+	$Sprite.texture = texture
+	
+	_item_info = item_info
 
 func pickup():
 	queue_free()

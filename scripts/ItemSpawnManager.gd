@@ -1,6 +1,5 @@
 extends Node
 
-
 onready var Main = get_node('/root/main')
 onready var Player = get_node('/root/main/Player')
 var ItemScene = preload('res://scenes/entities/Item.tscn')
@@ -14,18 +13,18 @@ var ItemTextures = [
 
 export (Array) var items = [
 	{
-		itemname = 'trash',
-		itemid = 0,
-		"texture": ItemTextures[0]
+		_name = null,
+		_id = -1,
+		"texture": null
 	},
 	{
-		itemname = 'dirt',
-		itemid = 1,
+		_name = 'dirt',
+		_id = 1,
 		"texture": ItemTextures[1]
 	},
 	{
-		itemname = 'stone',
-		itemid = 2,
+		_name = 'stone',
+		_id = 2,
 		"texture": ItemTextures[2]
 	}
 ]
@@ -33,9 +32,8 @@ export (Array) var items = [
 func _ready():
 	pass
 	
-func drop_item(item_info, spawn_position):
+func drop_item(item_info, location):
 	var newitem = ItemScene.instance()
-	newitem.position = spawn_position + ( tile_size / 2 )
-	newitem.get_child(0).texture = item_info.texture
-	newitem.spawn(Main)
+	var spawn_position = location + ( tile_size / 2 )
+	newitem.spawn(Main, spawn_position, item_info)
 

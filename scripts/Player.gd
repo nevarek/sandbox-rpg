@@ -50,9 +50,8 @@ func pick():
 	var tile_index = Tilemap.world_to_map(target)
 	Tilemap.hit_tile(tile_index, 10)
 	
-func pickup(item_info):
-	# TODO Implement logic for picking up items. Currently, the item scene ref is returned. It should contain information what item is picked up.
-	print(item_info)
+func pickup(collided_item):
+	Inventory.add_item(collided_item._item_info, 1)
 	
 func _faceTarget(target):
 	var orientation

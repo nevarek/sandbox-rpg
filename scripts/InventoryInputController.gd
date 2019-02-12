@@ -2,6 +2,7 @@ extends Node
 
 onready var Player = get_node('/root/main/Player')
 onready var HotbarPanel = get_node('/root/main/CanvasLayer/UI/HotbarPanel')
+onready var InventoryGrid = get_node('/root/main/CanvasLayer/UI/InventoryPanel').get_child(0)
 
 func _ready():
 	set_process_input(true)
@@ -42,6 +43,9 @@ func _input(event):
 		
 	if event.is_action_pressed("hotbar_eq"):
 		select_slot(11)
+		
+	if event.is_action_pressed("menu"):
+		InventoryGrid.toggle_view()
 		
 func select_slot(slotIndex):
 	Player.Inventory.select_slot(slotIndex)
