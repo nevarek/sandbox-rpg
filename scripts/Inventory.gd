@@ -1,31 +1,21 @@
 """
-Inventory
+Inventory (Player)
 
 Controls the logic for inventory management and slot selection.
 
 Interacts with the hotbar in order to visually represent changes.
 
-# TODO refactor to import items (maybe their texture refs in there too) into a file instead of statically declaring here #refactor
-# TODO refactor hotbar into this inventory manager, extend inventory by the 12 slots OR create a separate hotbar inventory #refactor
+# TODO refactor to import items (maybe their texture refs in there too) into a file instead of statically declaring here #refactor #1
+# TODO refactor hotbar into this inventory manager, extend inventory by the 12 slots OR create a separate hotbar inventory #refactor #2
 """
 
 extends Node
 
-const NULL_ITEM = {
-	"_name": null,
-	"_id": -1,
-	"texture": null,
-	"count": -1
-}
+const ITEM_TEXTURE_PATH_PREFIX = "res://assets/items/"
 
-var Player
+var NULL_ITEM = {}
 
-const item_textures = [
-	preload('res://assets/items/dirt.png'),
-	preload('res://assets/items/stone.png'),
-	preload('res://assets/items/gun.png'),
-	preload('res://assets/items/pick.png')
-]
+var item_textures = []
 
 const MAX_ITEM_STACK = 1000
 
@@ -35,52 +25,58 @@ export var slots = Array()
 export var selectedItem = Dictionary()
 export var selectedSlot = -1
 
-onready var Items = {
-	0: NULL_ITEM,
-	1: {
-		"_id": 1,
-		"_name": 'dirt',
-		"texture": item_textures[0]
-	},
-	2: {
-		"_id": 2,
-		"_name": 'gun',
-		"texture": item_textures[2]
-	},
-	3: {
-		"_id": 3,
-		"_name": 'pick',
-		"texture": item_textures[3]
-	}
-}
+var Items = {}
 
 func _ready():
 	# NOTE: Bug in setting new arrays. Reference for slots and item_list were the same???
 	# Fix here was to re-set the arrays
 	item_list = Array()
-	slots = get_node('/root/main/CanvasLayer/UI/InventoryPanel/InventoryGrid').slots
+	slots = get_node('/root/main/CanvasLayer/UI/Inventory').slots
 	
-	_init_slots()
 	_load_item_list()
+	_load_item_textures()
 	
-	set_item(1, item_list[2])
-	set_item(2, item_list[3])
+	NULL_ITEM = item_list[0]
 	
-	Player = get_node('/root/main/Player')
+	set_item_in_slot(1, item_list[2])
+	set_item_in_slot(2, item_list[3])
 	
 	set_process_input(true)
 
+func _load_item_textures():
+	var item_texture_path
+	
+	for item in item_list:
+		item_texture_path = ITEM_TEXTURE_PATH_PREFIX + str(item.texture_ref)
+		var texture = load(item_texture_path)
+		item_textures.append(texture)
+		item.texture_ref = texture
+
+func _load_json_information(path):
+	var result
+	
+	var file = File.new()
+	
+	if !file.file_exists(path):
+		push_error("[Inventory] Error occurred opening file \"%s\"" % path)
+		
+	result = file.open(path, File.READ)
+	
+	var content = file.get_as_text()
+	file.close()
+	
+	result = JSON.parse(content)
+	if result.error != OK:
+		push_error("[Inventory] Error occurred parsing JSON file")
+	
+	return result.result
+
 func init():
 	select_slot(0)
-	
-func _init_slots():
-	pass
 
 func get_item_in_slot(index):
 	print('getting item in slot index %d' % index)
 	var item_info = NULL_ITEM
-	
-	print(slots)
 	
 	if slots.size() > 0 and slots[index].item != NULL_ITEM:
 		item_info = slots[index].item
@@ -96,6 +92,7 @@ func select_slot(index):
 	selectedSlot = index
 	
 func _load_item_list():
+	Items = _load_json_information("res://data/items.json")
 	for item_index in Items:
 		item_list.append(Items[item_index])
 
@@ -107,16 +104,16 @@ func add_item(item_info, count = 1):
 		_apply_items_to_existing(existing_items, count)
 	else:
 		var itemObject = get_next_empty()
-		var new_item_info = {
-			
-		}
-		itemObject.item = item_info
-		itemObject.item.count = count
+		var new_item_info = item_info
+		new_item_info.count = count
 		
-func set_item(index, item_info, count = 1):
+		itemObject.set_item(new_item_info)
+		
+func set_item_in_slot(index, item_info, count = 1):
+	item_info.count = count
 	print('setting item %s' % str(item_info))
-	slots[index].item = item_info
-	slots[index].item.count = count
+	slots[index].set_item(item_info)
+	
 
 func get_item_stacks(item_info):
 	var existing_item_indicies = []

@@ -1,6 +1,8 @@
+# TODO map tiles to item IDs
 extends TileMap
 
 onready var ItemSpawnManager = get_node('/root/main/GlobalControllers/ItemSpawnManager')
+onready var InventoryManager = get_node('/root/main/CanvasLayer/UI/Inventory')
 
 var Tile = preload("res://scenes/Tile.tscn")
 
@@ -65,7 +67,9 @@ func remove_tile(pos):
 	var tile = get_cellv(pos)
 	set_tile(pos, tile_array[0])
 	
-	ItemSpawnManager.drop_item(ItemSpawnManager.items[tile + 1], map_to_world(pos))
+	var item_id = tile
+
+	ItemSpawnManager.drop_item(InventoryManager.get_item_list()[item_id + 1], map_to_world(pos))
 	
 func hit_tile(pos, damage):
 	if get_cellv(pos) != -1:

@@ -14,7 +14,6 @@ onready var EnemySpawnTimer = $GlobalControllers/EnemySpawnTimer
 onready var PlayerCamera = $Player/PlayerCamera
 
 func _ready():
-	$CanvasLayer/UI/HotbarPanel.select_slot(Player.Inventory.selectedSlot)
 	randomize()
 	PlayerCamera.make_current()
 
