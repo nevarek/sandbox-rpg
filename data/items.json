@@ -1,0 +1,27 @@
+{
+	"0": {
+        "_name": null,
+        "_id": -1,
+        "texture_ref": null
+    },
+	"1": {
+        "_id": 1,
+        "_name": "dirt",
+        "texture_ref": "dirt.png"
+	},
+	"2": {
+        "_id": 2,
+        "_name": "gun",
+        "texture_ref": "gun.png"
+	},
+	"3": {
+        "_id": 3,
+        "_name": "pick",
+        "texture_ref": "pick.png"
+	},
+    "4": {
+        "_id": 4,
+        "_name": "stone",
+        "texture_ref": "stone.png"
+	}
+}
