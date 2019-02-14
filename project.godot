@@ -19,6 +19,10 @@ config/name="SandboxRPG"
 run/main_scene="res://scenes/main.tscn"
 config/icon="res://assets/icon.png"
 
+[autoload]
+
+ItemInformation="*res://scripts/ItemInformation.gd"
+
 [input]
 
 ui_select={

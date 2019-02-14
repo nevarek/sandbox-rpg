@@ -2,26 +2,36 @@
 	"0": {
         "_name": null,
         "_id": -1,
-        "texture_ref": null
+        "texture_ref": null,
+        "ui_texture_ref": null,
+        "max_stack": -1
     },
 	"1": {
         "_id": 1,
         "_name": "dirt",
-        "texture_ref": "dirt.png"
+        "texture_ref": "dirt.png",
+        "ui_texture_ref": "ui_dirt.png",
+        "max_stack": "1000"
 	},
-	"2": {
+    "2": {
         "_id": 2,
-        "_name": "gun",
-        "texture_ref": "gun.png"
+        "_name": "stone",
+        "texture_ref": "stone.png",
+        "ui_texture_ref": "ui_stone.png",
+        "max_stack": "1000"
 	},
 	"3": {
         "_id": 3,
-        "_name": "pick",
-        "texture_ref": "pick.png"
+        "_name": "gun",
+        "texture_ref": "gun.png",
+        "ui_texture_ref": "gun.png",
+        "max_stack": "1"
 	},
-    "4": {
+	"4": {
         "_id": 4,
-        "_name": "stone",
-        "texture_ref": "stone.png"
+        "_name": "pick",
+        "texture_ref": "pick.png",
+        "ui_texture_ref": "pick.png",
+        "max_stack": "1"
 	}
 }

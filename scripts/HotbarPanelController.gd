@@ -16,15 +16,16 @@ func add_slot(slot):
 func add_labels():
 	for slot in _slots:
 		var hotbar_key_label = Label.new()
+		hotbar_key_label.name = "HotbarKeyLabel"
 		slot.add_child(hotbar_key_label)
 		hotbar_key_label.set("custom_colors/font_color", LABEL_COLOR)
 	
 	for slot in range(0, 9):
-		_slots[slot].get_child(2).text = str(slot + 1)
+		_slots[slot].get_child(3).text = str(slot + 1)
 	
-	_slots[9].get_child(2).text = "0"
-	_slots[10].get_child(2).text = "-"
-	_slots[11].get_child(2).text = "="
+	_slots[9].get_child(3).text = "0"
+	_slots[10].get_child(3).text = "-"
+	_slots[11].get_child(3).text = "="
 	
 func select_slot(index):
 	$SelectionSquare.position = $Grid.get_child(index).get_rect().position + (get_parent().get_slot_selection_offset())

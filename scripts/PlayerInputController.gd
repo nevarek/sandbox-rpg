@@ -67,9 +67,8 @@ func _physics_process(delta):
 			collision = Player.get_slide_collision(collider_index)
 			if collision != null and collision.collider != null:
 				if collision.collider.is_in_group("Items"):
-					var item = collision.collider.pickup()
-					print(item.count)
-					Player.pickup(item)
+					var item_info = collision.collider.pickup()
+					Player.pickup(item_info)
 
 	Player.move_and_slide(velocity, Vector2(0, -1), false, 4, 0.785398, false)
 

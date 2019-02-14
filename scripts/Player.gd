@@ -10,6 +10,7 @@ extends KinematicBody2D
 const Bullet = preload('res://scenes/entities/bullet.tscn')
 
 onready var Tilemap = get_node('/root/main/TileMap')
+onready var InventoryManager = get_node('/root/main/CanvasLayer/UI/Inventory')
 
 var Inventory
 var RayCastLeft
@@ -26,6 +27,7 @@ func _ready():
 	FlipTimer = $FlipTimer
 	_sprite = $Sprite
 	
+	yield(get_tree(), "idle_frame")
 	$BulletSpawnLocation.position = position
 	
 	$PlayerInputController._load()
@@ -50,8 +52,8 @@ func pick():
 	var tile_index = Tilemap.world_to_map(target)
 	Tilemap.hit_tile(tile_index, 10)
 	
-func pickup(collided_item):
-	Inventory.add_item(collided_item._item_info, 1)
+func pickup(item_info):
+	$Inventory.add_item(item_info)
 	
 func _faceTarget(target):
 	var orientation

@@ -69,7 +69,7 @@ func remove_tile(pos):
 	
 	var item_id = tile
 
-	ItemSpawnManager.drop_item(InventoryManager.get_item_list()[item_id + 1], map_to_world(pos))
+	ItemSpawnManager.drop_item(ItemInformation.item_list[item_id + 1], map_to_world(pos))
 	
 func hit_tile(pos, damage):
 	if get_cellv(pos) != -1:

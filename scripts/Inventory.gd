@@ -1,23 +1,17 @@
 """
 Inventory (Player)
 
-Controls the logic for inventory management and slot selection.
-
-Interacts with the hotbar in order to visually represent changes.
-
-# TODO refactor to import items (maybe their texture refs in there too) into a file instead of statically declaring here #refactor #1
-# TODO refactor hotbar into this inventory manager, extend inventory by the 12 slots OR create a separate hotbar inventory #refactor #2
+Controls the logic for inventory management and internal slot selection.
 """
-
 extends Node
 
-const ITEM_TEXTURE_PATH_PREFIX = "res://assets/items/"
+var InventorySlotScene = preload('res://scenes/InventorySlot.tscn')
+onready var InventoryUI = get_node('/root/main/CanvasLayer/UI/Inventory')
 
 var NULL_ITEM = {}
+var MAX_ITEM_STACK = 1000
 
-var item_textures = []
-
-const MAX_ITEM_STACK = 1000
+const NUMBER_OF_SLOTS = 72
 
 export var item_list = Array()
 export var slots = Array()
@@ -25,118 +19,113 @@ export var slots = Array()
 export var selectedItem = Dictionary()
 export var selectedSlot = -1
 
-var Items = {}
-
 func _ready():
 	# NOTE: Bug in setting new arrays. Reference for slots and item_list were the same???
 	# Fix here was to re-set the arrays
-	item_list = Array()
-	slots = get_node('/root/main/CanvasLayer/UI/Inventory').slots
-	
-	_load_item_list()
-	_load_item_textures()
-	
+	item_list = ItemInformation.item_list
+	MAX_ITEM_STACK = ItemInformation.MAX_ITEM_STACK
 	NULL_ITEM = item_list[0]
 	
-	set_item_in_slot(1, item_list[2])
-	set_item_in_slot(2, item_list[3])
-	
+	# wait until node tree is finished
+	yield(get_tree(), "idle_frame")
+	_init_slots()
 	set_process_input(true)
+	_startup()
 
-func _load_item_textures():
-	var item_texture_path
+func _init_slots():
+	for slot_index in range(0, NUMBER_OF_SLOTS):
+		# slot_index used to count only
+		var new_slot = InventorySlotScene.instance()
+		slots.append(new_slot)
 	
-	for item in item_list:
-		item_texture_path = ITEM_TEXTURE_PATH_PREFIX + str(item.texture_ref)
-		var texture = load(item_texture_path)
-		item_textures.append(texture)
-		item.texture_ref = texture
+	InventoryUI.setup_slots(slots)
 
-func _load_json_information(path):
-	var result
-	
-	var file = File.new()
-	
-	if !file.file_exists(path):
-		push_error("[Inventory] Error occurred opening file \"%s\"" % path)
-		
-	result = file.open(path, File.READ)
-	
-	var content = file.get_as_text()
-	file.close()
-	
-	result = JSON.parse(content)
-	if result.error != OK:
-		push_error("[Inventory] Error occurred parsing JSON file")
-	
-	return result.result
-
-func init():
+func _startup():
+	var gun_index = 3
+	var pick_index = 4
+	set_item_in_slot(1, item_list[gun_index])
+	set_item_in_slot(2, item_list[pick_index])
 	select_slot(0)
 
 func get_item_in_slot(index):
-	print('getting item in slot index %d' % index)
 	var item_info = NULL_ITEM
 	
 	if slots.size() > 0 and slots[index].item != NULL_ITEM:
 		item_info = slots[index].item
-		print("item info for slot: %s" % str(item_info))
 	
 	return item_info
-	
-func get_selected_item():
-	return get_item_in_slot(selectedSlot)
 	
 func select_slot(index):
 	selectedItem = get_item_in_slot(index)
 	selectedSlot = index
-	
-func _load_item_list():
-	Items = _load_json_information("res://data/items.json")
-	for item_index in Items:
-		item_list.append(Items[item_index])
 
-func add_item(item_info, count = 1):
-	print('adding item', str(item_info))
-	var existing_items = get_item_stacks(item_info)
+func get_selected_item():
+	return get_item_in_slot(selectedSlot)
 	
-	if existing_items.size() > 0:
-		_apply_items_to_existing(existing_items, count)
-	else:
-		var itemObject = get_next_empty()
-		var new_item_info = item_info
-		new_item_info.count = count
-		
-		itemObject.set_item(new_item_info)
-		
-func set_item_in_slot(index, item_info, count = 1):
-	item_info.count = count
-	print('setting item %s' % str(item_info))
-	slots[index].set_item(item_info)
-	
+func get_next_empty_slot():
+	for itemObject in slots:
+		if itemObject.is_empty():
+			return itemObject
+			
+	return null
 
-func get_item_stacks(item_info):
+func has_item(item_info):
+	return get_existing_item_slots(item_info).size() > 0
+	
+func get_existing_item_slots(item_info):
 	var existing_item_indicies = []
 	
 	for itemObject in slots:
 		if itemObject.item._id != -1 and itemObject.item._name == item_info._name:
 			existing_item_indicies.append(itemObject)
-			
+	
 	return existing_item_indicies
 	
-func _apply_items_to_existing(existing_items, count):
-	for itemObject in existing_items:
-		print(itemObject.item._name)
-#		if item.count < MAX_ITEM_STACK:
-#			print(item.count)
-#			return
-		
-func get_next_empty():
-	for itemObject in slots:
-		if itemObject.item._id == -1:
-			return itemObject
-			
-	return null
+func get_available_slots(item_info):
+	var available_item_indicies = []
 	
-func has_item(item_info):
-	return get_item_stacks(item_info).size() > 0
+	for itemObject in slots:
+		var item = itemObject.item
+		if item._id != -1 and item._name == item_info._name and item.count < item.max_stack:
+			available_item_indicies.append(itemObject)
+	
+	if available_item_indicies.size() < 1:
+		available_item_indicies = [get_next_empty_slot()]
+		
+	return available_item_indicies
+
+func add_item(item_info):
+	var remainder_item_info = item_info
+	print("info " + str(remainder_item_info))
+	
+	print('adding item %s' % str(item_info))
+	var available_slots = get_available_slots(item_info)
+	
+	if available_slots != null:
+		for slot in available_slots:
+			remainder_item_info = _apply_item_to(remainder_item_info, slot)
+			
+			if remainder_item_info.has("count") and remainder_item_info.count == 0:
+				break
+
+	while remainder_item_info.count > 0:
+		print("remainder %s" % str(remainder_item_info))
+		var new_slot = get_next_empty_slot()
+		
+		if new_slot != null:
+			remainder_item_info = _apply_item_to(remainder_item_info, new_slot)
+		else:
+			break
+				
+
+func set_item_in_slot(index, item_info, count = 1):
+	item_info.count = count
+	slots[index].set_item(item_info)
+	
+func _apply_item_to(item_info, slot):
+	var remainder
+	
+	remainder = slot.combine(item_info)
+	
+	return remainder
+		

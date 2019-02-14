@@ -1,9 +1,10 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://scripts/InventoryManager.gd" type="Script" id=1]
+[ext_resource path="res://scripts/InventoryUIManager.gd" type="Script" id=1]
 [ext_resource path="res://scripts/HotbarPanelController.gd" type="Script" id=2]
 [ext_resource path="res://assets/selection.png" type="Texture" id=3]
 [ext_resource path="res://scripts/InventoryPanel.gd" type="Script" id=4]
+
 
 [node name="Inventory" type="Control"]
 margin_right = 40.0

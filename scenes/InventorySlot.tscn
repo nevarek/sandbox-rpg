@@ -20,4 +20,16 @@ centered = false
 z_index = 1
 centered = false
 
+[node name="ItemCountLabel" type="Label" parent="."]
+margin_left = 16.0
+margin_top = 16.0
+margin_right = 32.0
+margin_bottom = 32.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 2
+valign = 2
+__meta__ = {
+"_edit_group_": true
+}
+
 [connection signal="gui_input" from="." to="." method="_on_InventorySlot_gui_input"]

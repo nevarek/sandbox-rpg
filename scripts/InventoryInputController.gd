@@ -1,7 +1,7 @@
 extends Node
 
 onready var Player = get_node('/root/main/Player')
-onready var InventoryUIManager = get_node('/root/main/CanvasLayer/UI/Inventory')
+onready var InventoryManager = get_node('/root/main/CanvasLayer/UI/Inventory')
 
 func _ready():
 	set_process_input(true)
@@ -44,8 +44,8 @@ func _input(event):
 		select_slot(11)
 		
 	if event.is_action_pressed("menu"):
-		InventoryUIManager.toggle_inventory_view()
+		InventoryManager.toggle_inventory_view()
 		
 func select_slot(slotIndex):
 	Player.Inventory.select_slot(slotIndex)
-	InventoryUIManager.select_slot(slotIndex)
+	InventoryManager.select_slot(slotIndex)
