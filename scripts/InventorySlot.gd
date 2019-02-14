@@ -38,23 +38,36 @@ func _update_count_label():
 func combine(item_info):
 	if is_empty():
 		item = _get_new_item(item_info)
-		
+		set_texture()
+	
 	var result = item_info.count + item.count
+	print(item_info)
 	
 	if result > int(item.max_stack):
+		print('here')
 		item.count = int(item.max_stack)
 		item_info.count = result - item.count
 	else:
+		print(result)
 		item.count = result
 		item_info.count = 0
 	
+	_update_count_label()
 	return item_info
 
 func set_texture():
 	$SlotSprite.texture = item.ui_texture_ref
 
 func _get_new_item(item_info):
-	var new_item = item_info
+	var new_item = {
+		_id = item_info._id,
+		_name= item_info._name,
+		texture_ref = item_info.texture_ref,
+		ui_texture_ref = item_info.ui_texture_ref,
+		max_stack = item_info.max_stack,
+		count = 0
+	}
+	
 	new_item.count = 0
 	
 	return new_item
